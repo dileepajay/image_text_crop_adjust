@@ -1,0 +1,10 @@
+README.md
+setup.py
+crop_adjust/__init__.py
+crop_adjust/crop_adjust.py
+crop_adjust.egg-info/PKG-INFO
+crop_adjust.egg-info/SOURCES.txt
+crop_adjust.egg-info/dependency_links.txt
+crop_adjust.egg-info/requires.txt
+crop_adjust.egg-info/top_level.txt
+tests/test_crop_adjust.py

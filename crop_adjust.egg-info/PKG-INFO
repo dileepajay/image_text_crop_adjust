@@ -1,0 +1,119 @@
+Metadata-Version: 2.2
+Name: crop_adjust
+Version: 0.1.0
+Summary: A library for adjusting bounding boxes around dark text/objects in images
+Home-page: http://github.com/dileepajay/crop_adjust
+Author: DileepaJay
+Author-email: me.dreamwalker@gmail.com
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+Requires-Dist: Pillow>=9.0.0
+Dynamic: author
+Dynamic: author-email
+Dynamic: description
+Dynamic: description-content-type
+Dynamic: home-page
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary
+
+ 
+# Image Crop & Adjust (Python)
+
+A Python port of the “Image Crop & Adjust” logic that reads an image and a text file describing rectangular regions and automatically adjusts each region based on dark/light boundaries. Dynamically calculates a “skip” factor for rows/columns, expands the final bounding box by a configurable ratio, and prints out the final coordinates.
+ 
+![Sample Image](sample_image.jpg)
+   ```plaintext
+    """
+    Example usage. Update IMAGE_PATH and TXT_PATH to point to your files.
+    """
+    IMAGE_PATH = r"samples\\03.jpg"
+    TXT_PATH   = r"samples\\03.txt"
+
+    # Create with default config; optionally override
+    # e.g. threshold=0.0, search_range=20, tolerance=20, expand_ratio=0.1
+    crop_adjust = ImageCropAdjust()
+
+    # Run the main process
+    crop_adjust.process_image_file(IMAGE_PATH, TXT_PATH)
+   ```
+## Features
+
+- **Rectangle-Based Cropping**  
+  Reads `(x, y, w, h)` from a text file, one rectangle per line.
+
+- **Grayscale Conversion**  
+  Converts the image to a 2D grayscale array for analysis.
+
+- **Adaptive Boundary Detection**  
+  Locates the dark/light boundary in both `x` and `y` directions, making minor adjustments to each rectangle.
+
+- **Skip Rows Calculation**  
+  Dynamically determines “skipRows” as `rect_width // 40` (min 1) to handle varying rectangle sizes gracefully.
+
+- **Expandable Margin**  
+  Automatically expands the final rectangle by a ratio (e.g., 10%).
+
+## Requirements
+
+- **Python** 3.7 or higher  
+- [**Pillow**](https://pypi.org/project/Pillow/) (for image handling)
+
+Install Pillow if you don’t already have it:
+```bash
+pip install pillow
+```
+
+## Usage
+
+1. **Clone** this repository:
+   ```bash
+   git clone https://github.com/YourUserName/ImageCropAdjustPython.git
+   ```
+2. **Navigate** into the project folder:
+   ```bash
+   cd ImageCropAdjustPython
+   ```
+3. **Update file paths** in `image_crop_adjust.py`:
+   ```python
+   if __name__ == '__main__':
+       IMAGE_PATH = r"path\to\your\image.jpg"
+       TXT_PATH   = r"path\to\your\rectangles.txt"
+       ...
+   ```
+   - **`IMAGE_PATH`**: The path to the image file (JPG, PNG, etc.).
+   - **`TXT_PATH`**: The path to the text file containing rectangle data.
+4. **Run** the script:
+   ```bash
+   python image_crop_adjust.py
+   ```
+5. Observe the console output for each rectangle in your `.txt` file:
+   ```plaintext
+   GIVEN:  190,125,172,31
+   FIXED:  186,117,100,19
+   ...
+   Processing Completed.
+   ```
+
+## Code Overview
+
+- **`ImageCropAdjust`**: Main class containing:
+  - **`__init__`**: Allows optional configuration of `threshold`, `search_range`, `tolerance`, `expand_ratio`.
+  - **`process_image_file`**: Reads an image and a `.txt` with rectangles, and processes each one.
+  - **`image_to_byte_array`**: Converts a `PIL` image to a 2D grayscale array `[width][height]`.
+  - **`fix_rect`**: Main wrapper that calculates `skipRows` from each rectangle’s width, then calls `find_change_layer`.
+  - **`find_change_layer`**: Adjusts the rectangle based on dark/light boundaries in both `x` and `y` directions, then expands the final rectangle.
+  - **`get_darkest_average_color`**: Determines the darkest color in a sub-rectangle, which is used to define the “dark range.”
+  - **`find_row_dark_rate`**: Computes the fraction of pixels in a row (or column) that fall within a tolerance of the darkest color.
+
+- **`if __name__ == '__main__':`**: Example usage. Modify `IMAGE_PATH` and `TXT_PATH` to point to your actual files and run the script.
+
+## Contributing
+
+1. Fork the repository.  
+2. Create your feature branch (`git checkout -b feature/my-new-feature`).  
+3. Commit your changes (`git commit -am 'Add some feature'`).  
+4. Push to the branch (`git push origin feature/my-new-feature`).  
+5. Create a new Pull Request.
+
+ 
