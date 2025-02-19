@@ -169,6 +169,8 @@ class CropAdjust:
                     skipping -= 1
                     if skipping == 0:
                         break
+                    else:
+                        skipping = skip_rows
         else:
             # move left
             skipping = skip_rows
@@ -183,6 +185,8 @@ class CropAdjust:
                     skipping -= 1
                     if skipping == 0:
                         break
+                    else:
+                        skipping = skip_rows
 
         # find where it becomes light
         skipping = skip_rows
@@ -195,6 +199,8 @@ class CropAdjust:
                 skipping -= 1
                 if skipping == 0:
                     break
+                else:
+                        skipping = skip_rows
 
         # Convert (x, y, x2, y2) => (x, y, width, height)
         rect[2] -= rect[0]
